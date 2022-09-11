@@ -10,6 +10,10 @@ public class CSVTransactionParser implements TransactionParser{
     // Implementation of TransactionParser interface.
     @Override
     public List<Transaction> parse(File transactionsFile) {
+        // Check if file is csv file
+        if (!transactionsFile.getName().endsWith(".csv")) {
+            throw new Error("Please make sure file is in csv format (ends with .csv)");
+        }
         try {
             Scanner sc = new Scanner(transactionsFile);
             List<Transaction> list = new ArrayList<Transaction>();
@@ -30,6 +34,22 @@ public class CSVTransactionParser implements TransactionParser{
 
     // creates a new transaction and sets its values according to given array of tokens.
     private Transaction convert(String[] tokens) {
+        //Check if fields are empty
+        System.out.println(tokens.length);
+        if (tokens.length != 4) {
+            throw new IllegalArgumentException("Please make sure none of the fields are empty");
+        }
+        else if (tokens[0] == null || tokens[1] == null || tokens[2] == null || tokens[3] == null) {
+            throw new IllegalArgumentException("Please make sure none of the fields are empty");
+        }
+
+        // Check if amount field is numeric
+        try {
+            BigDecimal bd = new BigDecimal(tokens[2]);
+        } catch (Exception e){
+            throw new NumberFormatException("Please make sure transaction amount is numeric");
+        }
+
         Transaction t = new Transaction();
         t.setDescription(tokens[0]);
         t.setDirection(tokens[1]);
