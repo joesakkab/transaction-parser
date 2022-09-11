@@ -7,19 +7,8 @@ import java.util.Scanner;
 
 public class CSVTransactionParser implements TransactionParser{
 
-    // Converts the list of transactions into a String.
-    // the purpose of this method is for testing the parse method in the Main class.
-    public static void toString(List<Transaction> list) {
-        String result = "";
-        for (int i = 0; i < list.size(); i++) {
-            result = result + "\n" + (i + 1) + ": " + list.get(i).toString();
-        }
-        System.out.println(result);
-
-    }
-
     // creates a new transaction and sets its values according to given array of tokens.
-    public static Transaction convert(String[] tokens) {
+    private Transaction convert(String[] tokens) {
         Transaction t = new Transaction();
         t.setDescription(tokens[0]);
         t.setDirection(tokens[1]);
