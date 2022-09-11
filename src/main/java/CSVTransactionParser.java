@@ -7,16 +7,6 @@ import java.util.Scanner;
 
 public class CSVTransactionParser implements TransactionParser{
 
-    // creates a new transaction and sets its values according to given array of tokens.
-    private Transaction convert(String[] tokens) {
-        Transaction t = new Transaction();
-        t.setDescription(tokens[0]);
-        t.setDirection(tokens[1]);
-        t.setAmount(new BigDecimal(tokens[2]));
-        t.setCurrency(tokens[3]);
-        return t;
-    }
-
     // Implementation of TransactionParser interface.
     @Override
     public List<Transaction> parse(File transactionsFile) {
@@ -36,6 +26,16 @@ public class CSVTransactionParser implements TransactionParser{
             e.printStackTrace();
         }
         return null;
+    }
+
+    // creates a new transaction and sets its values according to given array of tokens.
+    private Transaction convert(String[] tokens) {
+        Transaction t = new Transaction();
+        t.setDescription(tokens[0]);
+        t.setDirection(tokens[1]);
+        t.setAmount(new BigDecimal(tokens[2]));
+        t.setCurrency(tokens[3]);
+        return t;
     }
 
 

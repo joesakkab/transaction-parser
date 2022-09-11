@@ -1,10 +1,16 @@
 import java.math.BigDecimal;
+import java.util.Currency;
+import java.util.List;
 
 public class Transaction {
     String description;
-    String direction;
+    enum direction {
+        CREDIT,
+        DEBIT
+    }
+    direction dir = direction.CREDIT;
     BigDecimal amount;
-    String currency;
+    Currency cur = Currency.getInstance("USD");
 
     public String getDescription(){
         return this.description;
@@ -14,12 +20,16 @@ public class Transaction {
         this.description = givenDescription;
     }
 
-    public String getDirection(){
-        return this.direction;
+    public direction getDirection() {
+        return this.dir;
     }
 
     public void setDirection(String givendirection){
-        this.direction = givendirection;
+        if (givendirection == "Credit") {
+            dir = direction.CREDIT;
+        } else if (givendirection == "Debit") {
+            dir = direction.DEBIT;
+        }
     }
 
     public BigDecimal getAmount(){
@@ -31,11 +41,24 @@ public class Transaction {
     }
 
     public String getCurrency(){
-        return this.currency;
+        return this.cur.getCurrencyCode();
     }
 
     public void setCurrency(String givenCurrency){
-        this.currency = givenCurrency;
+        this.cur = Currency.getInstance(givenCurrency);
+    }
+
+    @Override
+    // Converts the list of transactions into a String.
+    // the purpose of this method is for testing the parse method in the Main class.
+    public String toString() {
+        String result = "";
+        result = "Description: " + this.getDescription() + "\n   " +
+                "Direction: " + this.getDirection() + "\n   " +
+                "Amount: " + this.getAmount() + "\n   " +
+                "Currency: " + this.getCurrency();
+        return result;
+
     }
 
 }

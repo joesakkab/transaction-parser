@@ -14,21 +14,9 @@ public class Main {
         List<Transaction> csvList = csvParser.parse(csvFile);
         // Print list for testing.
 //        System.out.println(csvList.get(0).getDescription());
-        toString(csvList);
-
-    }
-
-    // Converts the list of transactions into a String.
-    // the purpose of this method is for testing the parse method in the Main class.
-    public static void toString(List<Transaction> list) {
         String result = "";
-        for (int i = 0; i < list.size(); i++) {
-            Transaction t = list.get(i);
-            result = result + "\n\n" + (i + 1) + ": " +
-                    "Description: " + t.getDescription() + "\n   " +
-                    "Direction: " + t.getDirection() + "\n   " +
-                    "Amount: " + t.getAmount() + "\n   " +
-                    "Currency: " + t.getCurrency();
+        for (int i = 0; i < csvList.size(); i++) {
+            result = result + "\n\n" + (i + 1) + ": " + csvList.get(i).toString();
         }
         System.out.println(result);
 
