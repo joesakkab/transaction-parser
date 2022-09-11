@@ -2,16 +2,16 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
+//TODO Convert to DTO
 public class Transaction {
     String description;
     enum direction {
         CREDIT,
         DEBIT
     }
-    direction dir = direction.CREDIT;
+    direction dir;
     BigDecimal amount;
-    Currency cur = Currency.getInstance("USD");
-
+    Currency cur;
     public String getDescription(){
         return this.description;
     }
@@ -25,10 +25,10 @@ public class Transaction {
     }
 
     public void setDirection(String givendirection){
-        if (givendirection == "Credit") {
-            dir = direction.CREDIT;
-        } else if (givendirection == "Debit") {
-            dir = direction.DEBIT;
+        if (givendirection.equals("Credit")) {
+            this.dir = direction.CREDIT;
+        } else if (givendirection.equals("Debit")) {
+            this.dir = direction.DEBIT;
         }
     }
 
@@ -49,8 +49,6 @@ public class Transaction {
     }
 
     @Override
-    // Converts the list of transactions into a String.
-    // the purpose of this method is for testing the parse method in the Main class.
     public String toString() {
         String result = "";
         result = "Description: " + this.getDescription() + "\n   " +
@@ -58,7 +56,6 @@ public class Transaction {
                 "Amount: " + this.getAmount() + "\n   " +
                 "Currency: " + this.getCurrency();
         return result;
-
     }
 
 }

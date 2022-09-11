@@ -10,50 +10,56 @@ public class CSVTransactionParser implements TransactionParser{
     // Implementation of TransactionParser interface.
     @Override
     public List<Transaction> parse(File transactionsFile) {
-        // Check if file is csv file
-        if (!transactionsFile.getName().endsWith(".csv")) {
-            throw new Error("Please make sure file is in csv format (ends with .csv)");
+        Scanner sc = checkFileformat(transactionsFile);
+        List<Transaction> list = new ArrayList<Transaction>();
+        String line = "";
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            String[] tokens = line.split(",");
+            list.add(checkErrorsAndConvert(tokens));
         }
-        try {
-            Scanner sc = new Scanner(transactionsFile);
-            List<Transaction> list = new ArrayList<Transaction>();
-            String line = "";
-            // Iterate through each line since each line is a seperate transaction
-            while (sc.hasNextLine()) {
-                line = sc.nextLine();
-                String[] tokens = line.split(",");
-                list.add(convert(tokens));
-            }
-            return list;
-        } catch (FileNotFoundException e) {
-            System.out.println("File is not found.");
-            e.printStackTrace();
-        }
-        return null;
+        return list;
     }
 
-    // creates a new transaction and sets its values according to given array of tokens.
-    private Transaction convert(String[] tokens) {
-        //Check if fields are empty
-        System.out.println(tokens.length);
-        if (tokens.length != 4) {
-            throw new IllegalArgumentException("Please make sure none of the fields are empty");
-        }
-        else if (tokens[0] == null || tokens[1] == null || tokens[2] == null || tokens[3] == null) {
-            throw new IllegalArgumentException("Please make sure none of the fields are empty");
+    private Scanner checkFileformat(File transactionsFile) {
+        if (!transactionsFile.getName().endsWith(".csv")) {
+            throw new TransactionParserException("Please make sure file is in csv format (ends with .csv)");
         }
 
-        // Check if amount field is numeric
         try {
-            BigDecimal bd = new BigDecimal(tokens[2]);
-        } catch (Exception e){
-            throw new NumberFormatException("Please make sure transaction amount is numeric");
+            Scanner scan = new Scanner(transactionsFile);
+            return scan;
+        } catch (Exception e) {
+            throw new TransactionParserException("", e);
         }
+    }
+    private void checkTransactionFields(String[] tokens) {
+        for (int i = 0; i < tokens.length; i++) {
+            tokens[i] = tokens[i].trim();
+            if (tokens[i].equals("")) {
+                throw new TransactionParserException("Please make sure none of the fields are white spaces");
+            }
+        }
+        if (tokens.length != 4){
+            throw new TransactionParserException("Please make sure none of the fields are empty");
+        }
+    }
 
+    private BigDecimal checkIfNumeric(String token) {
+        try {
+            BigDecimal bd = new BigDecimal(token);
+            return bd;
+        } catch (Exception e){
+            throw new TransactionParserException("Please make sure transaction amount is numeric");
+        }
+    }
+    private Transaction checkErrorsAndConvert(String[] tokens) {
+        checkTransactionFields(tokens);
+        checkIfNumeric(tokens[2]);
         Transaction t = new Transaction();
         t.setDescription(tokens[0]);
         t.setDirection(tokens[1]);
-        t.setAmount(new BigDecimal(tokens[2]));
+        t.setAmount(checkIfNumeric(tokens[2]));
         t.setCurrency(tokens[3]);
         return t;
     }
