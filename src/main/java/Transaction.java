@@ -4,14 +4,14 @@ import java.util.List;
 
 //TODO Convert to DTO
 public class Transaction {
-    String description;
-    enum direction {
+    private String description;
+    private enum direction {
         CREDIT,
         DEBIT
     }
-    direction dir;
-    BigDecimal amount;
-    Currency cur;
+    private direction dir;
+    private BigDecimal amount;
+    private Currency cur;
     public String getDescription(){
         return this.description;
     }
@@ -24,10 +24,10 @@ public class Transaction {
         return this.dir;
     }
 
-    public void setDirection(String givendirection){
-        if (givendirection.equals("Credit")) {
+    public void setDirection(String givenDirection){
+        if (givenDirection.equals("Credit")) {
             this.dir = direction.CREDIT;
-        } else if (givendirection.equals("Debit")) {
+        } else if (givenDirection.equals("Debit")) {
             this.dir = direction.DEBIT;
         }
     }
