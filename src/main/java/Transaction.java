@@ -1,17 +1,16 @@
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.List;
 
+//TODO Convert to DTO
 public class Transaction {
-    String description;
-    enum direction {
+    private String description;
+    private Direction direction;
+    private BigDecimal amount;
+    private Currency currency;
+    private enum Direction {
         CREDIT,
         DEBIT
     }
-    direction dir = direction.CREDIT;
-    BigDecimal amount;
-    Currency cur = Currency.getInstance("USD");
-
     public String getDescription(){
         return this.description;
     }
@@ -20,15 +19,15 @@ public class Transaction {
         this.description = givenDescription;
     }
 
-    public direction getDirection() {
-        return this.dir;
+    public Direction getDirection() {
+        return this.direction;
     }
 
-    public void setDirection(String givendirection){
-        if (givendirection == "Credit") {
-            dir = direction.CREDIT;
-        } else if (givendirection == "Debit") {
-            dir = direction.DEBIT;
+    public void setDirection(String givenDirection){
+        if (givenDirection.equals("Credit")) {
+            this.direction = Direction.CREDIT;
+        } else if (givenDirection.equals("Debit")) {
+            this.direction = Direction.DEBIT;
         }
     }
 
@@ -41,24 +40,21 @@ public class Transaction {
     }
 
     public String getCurrency(){
-        return this.cur.getCurrencyCode();
+        return this.currency.getCurrencyCode();
     }
 
     public void setCurrency(String givenCurrency){
-        this.cur = Currency.getInstance(givenCurrency);
+        this.currency = Currency.getInstance(givenCurrency);
     }
 
     @Override
-    // Converts the list of transactions into a String.
-    // the purpose of this method is for testing the parse method in the Main class.
     public String toString() {
-        String result = "";
+        String result;
         result = "Description: " + this.getDescription() + "\n   " +
                 "Direction: " + this.getDirection() + "\n   " +
                 "Amount: " + this.getAmount() + "\n   " +
                 "Currency: " + this.getCurrency();
         return result;
-
     }
 
 }
