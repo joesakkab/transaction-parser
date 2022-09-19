@@ -21,7 +21,7 @@ public class H2TransactionRepository implements TransactionsRepository {
             Class.forName(JDBC_DRIVER);
             return DriverManager.getConnection(DB_URL, USER, PASS);
         } catch (SQLException | ClassNotFoundException e) {
-            throw new H2TransactionRepositoryException(e.getMessage());
+            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
         }
     }
 
@@ -38,7 +38,7 @@ public class H2TransactionRepository implements TransactionsRepository {
             STMT.executeUpdate();
 
         } catch (Exception e) {
-            throw new H2TransactionRepositoryException(e.getMessage());
+            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
         }
 //        System.out.println("Goodbye!");
 
@@ -69,14 +69,14 @@ public class H2TransactionRepository implements TransactionsRepository {
                     t.setCurrency(currency);
                     list.add(t);
                 } catch (SQLException e) {
-                    throw new H2TransactionRepositoryException(e.getMessage());
+                    throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
                 }
             }
 //            System.out.println("Goodbye!");
             return list;
 
         } catch (Exception e) {
-            throw new H2TransactionRepositoryException(e.getMessage());
+            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
         }
     }
 
@@ -87,7 +87,7 @@ public class H2TransactionRepository implements TransactionsRepository {
             STMT = getConnection().prepareStatement(sql);
             STMT.executeUpdate();
         } catch (Exception e) {
-            throw new H2TransactionRepositoryException(e.getMessage());
+            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
         }
 //        System.out.println("Goodbye!");
 
@@ -109,7 +109,7 @@ public class H2TransactionRepository implements TransactionsRepository {
             STMT.executeUpdate();
             System.out.println("CHECK 3");
         } catch (Exception e) {
-            throw new H2TransactionRepositoryException(e.getMessage());
+            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
         }
 //        System.out.println("Goodbye!");
     }
