@@ -1,4 +1,6 @@
-package com.progressoft.transactionsparser;
+package com.progressoft.transactions.transactionsparser;
+import com.progressoft.transactions.Transaction;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;

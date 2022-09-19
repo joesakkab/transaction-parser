@@ -1,3 +1,4 @@
+package com.progressoft.transactions;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -24,9 +25,9 @@ public class Transaction {
     }
 
     public void setDirection(String givenDirection){
-        if (givenDirection.equals("Credit")) {
+        if (givenDirection.equalsIgnoreCase("Credit")) {
             this.direction = Direction.CREDIT;
-        } else if (givenDirection.equals("Debit")) {
+        } else if (givenDirection.equalsIgnoreCase("Debit")) {
             this.direction = Direction.DEBIT;
         }
     }
