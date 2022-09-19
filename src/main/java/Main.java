@@ -5,18 +5,17 @@ import com.progressoft.transactions.transactionsrepository.H2TransactionReposito
 import com.progressoft.transactions.transactionsrepository.TransactionsRepository;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-    public static void main (String[] args) throws SQLException {
+    public static void main(String[] args) {
         TransactionParser csvParser = new CSVTransactionParser();
         File csvFile = new File("src/main/resources/transactions.csv");
         List<Transaction> transactions = csvParser.parse(csvFile);
         System.out.println(listToString(transactions));
 
         TransactionsRepository repository = new H2TransactionRepository();
-        repository.resetTable("DROP");
+        repository.resetTable();
         repository.createTransactionTable();
         for (Transaction t : transactions) {
             repository.save(t);

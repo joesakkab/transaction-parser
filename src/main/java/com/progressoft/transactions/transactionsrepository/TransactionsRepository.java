@@ -1,18 +1,15 @@
 package com.progressoft.transactions.transactionsrepository;
-import com.progressoft.transactions.Transaction;
-import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
+import com.progressoft.transactions.Transaction;
+
 import java.util.List;
 
-@Repository
 public interface TransactionsRepository {
     void save(Transaction t);
-    List<Transaction> listTransactions() throws SQLException;
-    void resetTable(String action);
+
+    List<Transaction> listTransactions();
+
+    void resetTable();
+
     void createTransactionTable();
-
-
-
-
 }

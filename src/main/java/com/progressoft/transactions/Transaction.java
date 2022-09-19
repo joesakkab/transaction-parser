@@ -1,22 +1,24 @@
 package com.progressoft.transactions;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 
-//TODO Convert to DTO
 public class Transaction {
     private String description;
     private Direction direction;
     private BigDecimal amount;
     private Currency currency;
+
     private enum Direction {
         CREDIT,
         DEBIT
     }
-    public String getDescription(){
+
+    public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String givenDescription){
+    public void setDescription(String givenDescription) {
         this.description = givenDescription;
     }
 
@@ -24,7 +26,7 @@ public class Transaction {
         return this.direction;
     }
 
-    public void setDirection(String givenDirection){
+    public void setDirection(String givenDirection) {
         if (givenDirection.equalsIgnoreCase("Credit")) {
             this.direction = Direction.CREDIT;
         } else if (givenDirection.equalsIgnoreCase("Debit")) {
@@ -32,19 +34,19 @@ public class Transaction {
         }
     }
 
-    public BigDecimal getAmount(){
+    public BigDecimal getAmount() {
         return this.amount;
     }
 
-    public void setAmount(BigDecimal givenAmount){
+    public void setAmount(BigDecimal givenAmount) {
         this.amount = givenAmount;
     }
 
-    public String getCurrency(){
+    public String getCurrency() {
         return this.currency.getCurrencyCode();
     }
 
-    public void setCurrency(String givenCurrency){
+    public void setCurrency(String givenCurrency) {
         this.currency = Currency.getInstance(givenCurrency);
     }
 

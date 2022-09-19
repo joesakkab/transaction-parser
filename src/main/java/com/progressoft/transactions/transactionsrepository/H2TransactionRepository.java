@@ -2,7 +2,6 @@ package com.progressoft.transactions.transactionsrepository;
 
 
 import com.progressoft.transactions.Transaction;
-import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -19,6 +18,7 @@ public class H2TransactionRepository implements TransactionsRepository {
     static final String PASS = "";
 
     public void save(Transaction t) {
+        //TODO convert it to prepared statements (read about it)
         String sql = "INSERT INTO Transaction (description, direction, amount, currency) VALUES ( '" +
                 t.getDescription() + "', '" +
                 t.getDirection() + "', '" +
@@ -26,43 +26,40 @@ public class H2TransactionRepository implements TransactionsRepository {
                 t.getCurrency() + "')";
         System.out.println("The sql statement for save is: " + sql);
         runSQLStatements(sql, "INSERT");
-
-
     }
 
-    public void resetTable(String action) {
+    public void resetTable() {
         String sql = "DROP TABLE Transaction";
-//        switch (action) {
-//            case "DROP":
-//                sql = "DROP TABLE Transaction";
-//            case "DELETE":
-//                sql = "TRUNCATE TABLE Transaction";
-//        }
-
         runSQLStatements(sql, "DELETE");
-
     }
 
-    public List<Transaction> listTransactions() throws SQLException {
+    public List<Transaction> listTransactions() {
         String sql = "SELECT * FROM Transaction";
         ResultSet rs = runSQLStatements(sql, "READ");
         System.out.println(rs.toString());
         List<Transaction> list = new ArrayList<>();
 
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            String description = rs.getString("description");
-            String direction = rs.getString("direction");
-            BigDecimal amount = new BigDecimal(rs.getInt("amount"));
-            String currency = rs.getString("currency");
+        //TODO instead of while(true) use rs.next() for the while loop
+        while (true) {
+            try {
+                if (!rs.next()) break;
+
+                int id = rs.getInt("id");
+                String description = rs.getString("description");
+                String direction = rs.getString("direction");
+                BigDecimal amount = new BigDecimal(rs.getInt("amount"));
+                String currency = rs.getString("currency");
 
 
-            Transaction t = new Transaction();
-            t.setDescription(description);
-            t.setDirection(direction);
-            t.setAmount(amount);
-            t.setCurrency(currency);
-            list.add(t);
+                Transaction t = new Transaction();
+                t.setDescription(description);
+                t.setDirection(direction);
+                t.setAmount(amount);
+                t.setCurrency(currency);
+                list.add(t);
+            } catch (SQLException e) {
+                //TODO Handle the exception
+            }
         }
         return list;
     }
@@ -78,16 +75,13 @@ public class H2TransactionRepository implements TransactionsRepository {
         runSQLStatements(sql, "CREATE");
     }
 
+    //TODO refactor this long method
     private static ResultSet runSQLStatements(String sql, String action) {
         Connection conn = null;
         Statement stmt = null;
 
         try {
-
-            // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // STEP 2: Open a connection
             System.out.println("Connecting to a database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -101,7 +95,7 @@ public class H2TransactionRepository implements TransactionsRepository {
                     break;
                 case "READ":
                     System.out.println("Connected to database successfully... to insert data into columns");
-                    ResultSet rs =  stmt.executeQuery(sql);
+                    ResultSet rs = stmt.executeQuery(sql);
                     System.out.println(rs.toString());
                     return rs;
 
@@ -112,13 +106,9 @@ public class H2TransactionRepository implements TransactionsRepository {
                     break;
             }
 
-        } catch (SQLException se) {
-            // Handle errors for JDBC
-            se.printStackTrace();
         } catch (Exception e) {
-            // Handle errors for Class.forName
-            e.printStackTrace();
-        } // end try
+            //TODO Handle the exception
+        }
         System.out.println("Goodbye!");
         return null;
     }
