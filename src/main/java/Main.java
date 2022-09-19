@@ -18,11 +18,11 @@ public class Main {
         TransactionsRepository repository = new H2TransactionRepository();
 //        repository.resetTable();
         repository.createTransactionTable();
-//        for (Transaction t : transactions) {
-//            repository.save(t);
-//        }
-//        List<Transaction> sqlSelect = repository.listTransactions();
-//        System.out.println(listToString(sqlSelect));
+        for (Transaction t : transactions) {
+            repository.save(t);
+        }
+        List<Transaction> sqlSelect = repository.listTransactions();
+        System.out.println(listToString(sqlSelect));
 
     }
 

@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface TransactionsRepository {
-    void save(Transaction t) throws SQLException;
+    void save(Transaction t);
 
-    List<Transaction> listTransactions() throws SQLException;
+    List<Transaction> listTransactions();
 
-    void resetTable() throws SQLException;
+    void resetTable();
 
-    void createTransactionTable() throws SQLException;
+    void createTransactionTable();
 }

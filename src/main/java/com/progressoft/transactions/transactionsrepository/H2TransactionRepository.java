@@ -8,52 +8,49 @@ import java.util.List;
 public class H2TransactionRepository implements TransactionsRepository {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:derby:memory:test";
+    static final String DB_URL = "jdbc:h2:mem:Transactions;DB_CLOSE_DELAY=-1";
 
     // Database credentials
-    static final String USER = "jsakkab";
+    static final String USER = "sa";
     static final String PASS = "";
 //    static Connection CONN;
     static PreparedStatement STMT = null;
 
-    private static Connection getConneciton() {
+    private static Connection getConnection() {
         try {
             Class.forName(JDBC_DRIVER);
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            return conn;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            return DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new H2TransactionRepositoryException(e.getMessage());
         }
     }
 
 
     @Override
-    public void save(Transaction t) throws SQLException {
+    public void save(Transaction t) {
         try {
             String sql = "INSERT INTO Transaction (description, direction, amount, currency) VALUES (?, ?, ?, ?)";
-            STMT = getConneciton().prepareStatement(sql);
+            STMT = getConnection().prepareStatement(sql);
             STMT.setString(1, t.getDescription());
             STMT.setString(2, "" + t.getDirection());
             STMT.setBigDecimal(3, t.getAmount());
             STMT.setString(4, t.getCurrency());
-            STMT.executeUpdate(sql);
+            STMT.executeUpdate();
 
         } catch (Exception e) {
-            throw new SQLException("Please check sql statement");
+            throw new H2TransactionRepositoryException(e.getMessage());
         }
-        System.out.println("Goodbye!");
+//        System.out.println("Goodbye!");
 
     }
 
     @Override
-    public List<Transaction> listTransactions() throws SQLException {
+    public List<Transaction> listTransactions() {
         try {
 
             String sql = "SELECT * FROM Transaction";
-            STMT = getConneciton().prepareStatement(sql);
-            ResultSet rs = STMT.executeQuery(sql);
+            STMT = getConnection().prepareStatement(sql);
+            ResultSet rs = STMT.executeQuery();
             List<Transaction> list = new ArrayList<>();
 
             while (rs.next()) {
@@ -72,32 +69,32 @@ public class H2TransactionRepository implements TransactionsRepository {
                     t.setCurrency(currency);
                     list.add(t);
                 } catch (SQLException e) {
-                    throw new SQLException("Please check if table is not empty");
+                    throw new H2TransactionRepositoryException(e.getMessage());
                 }
             }
-            System.out.println("Goodbye!");
+//            System.out.println("Goodbye!");
             return list;
 
         } catch (Exception e) {
-            throw new SQLException("Please check sql statement");
+            throw new H2TransactionRepositoryException(e.getMessage());
         }
     }
 
     @Override
-    public void resetTable() throws SQLException {
+    public void resetTable() {
         try {
             String sql = "DROP TABLE Transaction";
-            STMT = getConneciton().prepareStatement(sql);
-            STMT.executeUpdate(sql);
+            STMT = getConnection().prepareStatement(sql);
+            STMT.executeUpdate();
         } catch (Exception e) {
-            throw new SQLException("Please check sql statement");
+            throw new H2TransactionRepositoryException(e.getMessage());
         }
-        System.out.println("Goodbye!");
+//        System.out.println("Goodbye!");
 
     }
 
     @Override
-    public void createTransactionTable() throws SQLException {
+    public void createTransactionTable() {
         try {
             String sql = "CREATE TABLE Transaction" +
                     "(id INTEGER AUTO_INCREMENT, " +
@@ -107,13 +104,13 @@ public class H2TransactionRepository implements TransactionsRepository {
                     "currency VARCHAR(255), " +
                     "PRIMARY KEY (id))";
             System.out.println("CHECK");
-            STMT = getConneciton().prepareStatement(sql);
+            STMT = getConnection().prepareStatement(sql);
             System.out.println("CHECK 2");
-            STMT.executeUpdate(sql);
+            STMT.executeUpdate();
             System.out.println("CHECK 3");
         } catch (Exception e) {
-            throw new SQLException("Please check sql statement");
+            throw new H2TransactionRepositoryException(e.getMessage());
         }
-        System.out.println("Goodbye!");
+//        System.out.println("Goodbye!");
     }
 }
