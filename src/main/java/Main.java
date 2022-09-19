@@ -1,5 +1,6 @@
 import com.progressoft.transactions.Transaction;
 import com.progressoft.transactions.transactionsparser.CSVTransactionParser;
+import com.progressoft.transactions.transactionsparser.XMLTransactionParser;
 import com.progressoft.transactions.transactionsparser.TransactionParser;
 import com.progressoft.transactions.transactionsrepository.H2TransactionRepository;
 import com.progressoft.transactions.transactionsrepository.TransactionsRepository;
@@ -9,16 +10,22 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         TransactionParser csvParser = new CSVTransactionParser();
         File csvFile = new File("src/main/resources/transactions.csv");
-        List<Transaction> transactions = csvParser.parse(csvFile);
-        System.out.println(listToString(transactions));
+        List<Transaction> csvTransactions = csvParser.parse(csvFile);
+        System.out.println(listToString(csvTransactions));
+
+        TransactionParser xmlParser = new XMLTransactionParser();
+        File xmlFile = new File("src/main/resources/transactions.xml");
+        List<Transaction> xmlTransactions = xmlParser.parse(xmlFile);
+        System.out.println(listToString(xmlTransactions));
+
 
         TransactionsRepository repository = new H2TransactionRepository();
 //        repository.resetTable();
         repository.createTransactionTable();
-        for (Transaction t : transactions) {
+        for (Transaction t : csvTransactions) {
             repository.save(t);
         }
         List<Transaction> sqlSelect = repository.listTransactions();
