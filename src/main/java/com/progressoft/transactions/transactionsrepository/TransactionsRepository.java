@@ -2,14 +2,15 @@ package com.progressoft.transactions.transactionsrepository;
 
 import com.progressoft.transactions.Transaction;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface TransactionsRepository {
-    void save(Transaction t);
+    void save(Transaction t) throws SQLException;
 
-    List<Transaction> listTransactions();
+    List<Transaction> listTransactions() throws SQLException;
 
-    void resetTable();
+    void resetTable() throws SQLException;
 
-    void createTransactionTable();
+    void createTransactionTable() throws SQLException;
 }
