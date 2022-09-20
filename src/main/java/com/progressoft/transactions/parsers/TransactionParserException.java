@@ -1,4 +1,4 @@
-package com.progressoft.transactions.transactionsparser;
+package com.progressoft.transactions.parsers;
 public class TransactionParserException extends RuntimeException {
     public TransactionParserException(String message) {
         super(message);

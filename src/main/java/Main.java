@@ -1,12 +1,11 @@
 import com.progressoft.transactions.Transaction;
-import com.progressoft.transactions.transactionsparser.CSVTransactionParser;
-import com.progressoft.transactions.transactionsparser.XMLTransactionParser;
-import com.progressoft.transactions.transactionsparser.TransactionParser;
-import com.progressoft.transactions.transactionsrepository.H2TransactionRepository;
-import com.progressoft.transactions.transactionsrepository.TransactionsRepository;
+import com.progressoft.transactions.parsers.CSVTransactionParser;
+import com.progressoft.transactions.parsers.XMLTransactionParser;
+import com.progressoft.transactions.parsers.TransactionParser;
+import com.progressoft.transactions.repositories.H2TransactionRepository;
+import com.progressoft.transactions.repositories.TransactionsRepository;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 
 public class Main {

@@ -1,4 +1,4 @@
-package com.progressoft.transactions.transactionsparser;
+package com.progressoft.transactions.parsers;
 
 import com.progressoft.transactions.Transaction;
 
@@ -10,8 +10,7 @@ public class ParserValidators {
     public Transaction checkErrorsAndConvert(String[] tokens) {
         checkTransactionFields(tokens);
         checkIfNumeric(tokens[2]);
-        Transaction t = new Transaction(tokens[0], tokens[1], checkIfNumeric(tokens[2]), tokens[3]);
-        return t;
+        return new Transaction(tokens[0], tokens[1], checkIfNumeric(tokens[2]), tokens[3]);
     }
 
     public void validateFileFormat(File transactionsFile, String fileformat) {

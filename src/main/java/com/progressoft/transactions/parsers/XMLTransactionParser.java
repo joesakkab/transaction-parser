@@ -1,4 +1,4 @@
-package com.progressoft.transactions.transactionsparser;
+package com.progressoft.transactions.parsers;
 
 import com.progressoft.transactions.Transaction;
 import org.w3c.dom.Document;

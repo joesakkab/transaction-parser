@@ -1,4 +1,4 @@
-package com.progressoft.transactions.transactionsrepository;
+package com.progressoft.transactions.repositories;
 
 public class H2TransactionRepositoryException extends RuntimeException {
 

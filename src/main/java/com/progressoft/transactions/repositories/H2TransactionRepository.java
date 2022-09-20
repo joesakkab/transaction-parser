@@ -1,4 +1,4 @@
-package com.progressoft.transactions.transactionsrepository;
+package com.progressoft.transactions.repositories;
 import com.progressoft.transactions.Transaction;
 import java.math.BigDecimal;
 import java.sql.*;
