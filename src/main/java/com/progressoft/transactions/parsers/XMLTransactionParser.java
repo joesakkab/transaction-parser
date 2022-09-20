@@ -32,7 +32,7 @@ public class XMLTransactionParser implements TransactionParser {
     // Iterate through the different transactions in the xml file.
     public static List<Transaction> getAllTransactions(Document doc) {
         NodeList transactionNodes = doc.getElementsByTagName("Transaction");
-        List<Transaction> ls = new ArrayList<Transaction>();
+        List<Transaction> ls = new ArrayList<>();
         for (int i = 0; i < transactionNodes.getLength(); i++) {
             Node transactionNode = transactionNodes.item(i);
             ls.add(getTransactionNode(transactionNode));

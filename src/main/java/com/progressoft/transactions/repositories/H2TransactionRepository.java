@@ -4,24 +4,30 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+//import org.h2.Driver;
 
 public class H2TransactionRepository implements TransactionsRepository {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:mem:Transactions;DB_CLOSE_DELAY=-1";
-
+    static final String DB_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     // Database credentials
-    static final String USER = "sa";
+    static final String USER = "jsakkab";
     static final String PASS = "";
 //    static Connection CONN;
     static PreparedStatement STMT = null;
+    static final String TABLENAME = "Transaction";
+    static Connection CONN = null;
+
+    public H2TransactionRepository() {
+        CONN = getConnection();
+    }
 
     private static Connection getConnection() {
         try {
             Class.forName(JDBC_DRIVER);
             return DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
+        } catch (Exception e) {
+            throw new H2TransactionRepositoryException("The message is: " + e.getMessage(),e.getCause());
         }
     }
 
@@ -29,8 +35,8 @@ public class H2TransactionRepository implements TransactionsRepository {
     @Override
     public void save(Transaction t) {
         try {
-            String sql = "INSERT INTO Transaction (description, direction, amount, currency) VALUES (?, ?, ?, ?)";
-            STMT = getConnection().prepareStatement(sql);
+            String sql = "INSERT INTO " + TABLENAME + " (description, direction, amount, currency) VALUES (?, ?, ?, ?)";
+            STMT = CONN.prepareStatement(sql);
             STMT.setString(1, t.getDescription());
             STMT.setString(2, "" + t.getDirection());
             STMT.setBigDecimal(3, t.getAmount());
@@ -48,8 +54,8 @@ public class H2TransactionRepository implements TransactionsRepository {
     public List<Transaction> listTransactions() {
         try {
 
-            String sql = "SELECT * FROM Transaction";
-            STMT = getConnection().prepareStatement(sql);
+            String sql = "SELECT * FROM " + TABLENAME;
+            STMT = CONN.prepareStatement(sql);
             ResultSet rs = STMT.executeQuery();
             List<Transaction> list = new ArrayList<>();
 
@@ -76,8 +82,8 @@ public class H2TransactionRepository implements TransactionsRepository {
     @Override
     public void resetTable() {
         try {
-            String sql = "DROP TABLE Transaction";
-            STMT = getConnection().prepareStatement(sql);
+            String sql = "DROP TABLE " + TABLENAME;
+            STMT = CONN.prepareStatement(sql);
             STMT.executeUpdate();
         } catch (Exception e) {
             throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());
@@ -87,14 +93,14 @@ public class H2TransactionRepository implements TransactionsRepository {
     @Override
     public void createTransactionTable() {
         try {
-            String sql = "CREATE TABLE Transaction" +
+            String sql = "CREATE TABLE " + TABLENAME +
                     "(id INTEGER AUTO_INCREMENT, " +
                     "description VARCHAR(255), " +
                     "direction ENUM('CREDIT', 'DEBIT'), " +
                     "amount INTEGER, " +
                     "currency VARCHAR(255), " +
                     "PRIMARY KEY (id))";
-            STMT = getConnection().prepareStatement(sql);
+            STMT = CONN.prepareStatement(sql);
             STMT.executeUpdate();
         } catch (Exception e) {
             throw new H2TransactionRepositoryException(e.getMessage(), e.getCause());

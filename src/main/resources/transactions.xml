@@ -1,6 +1,6 @@
 <TransactionList>
     <Transaction>
-        <Description>Cash withdrawal</Description>
+        <Description>Bank Cash withdrawal</Description>
         <Direction>Debit</Direction>
         <Amount>
             <Value>100</Value>
