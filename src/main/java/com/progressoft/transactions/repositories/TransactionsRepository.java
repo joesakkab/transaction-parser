@@ -1,8 +1,7 @@
-package com.progressoft.transactions.transactionsrepository;
+package com.progressoft.transactions.repositories;
 
 import com.progressoft.transactions.Transaction;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface TransactionsRepository {

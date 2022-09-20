@@ -14,6 +14,16 @@ public class Transaction {
         DEBIT
     }
 
+    public Transaction() {
+
+    }
+    public Transaction(String description, String direction, BigDecimal amount, String currency) {
+        this.setDescription(description);
+        this.setDirection(direction);
+        this.setAmount(amount);
+        this.setCurrency(currency);
+    }
+
     public String getDescription() {
         return this.description;
     }
