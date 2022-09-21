@@ -1,10 +1,13 @@
 package com.progressoft.transactions;
 
 import com.progressoft.transactions.parsers.TransactionParser;
+import com.progressoft.transactions.parsers.TransactionParserException;
 import com.progressoft.transactions.parsers.TransactionParserFactory;
 import com.progressoft.transactions.repositories.H2TransactionRepository;
 import com.progressoft.transactions.repositories.TransactionsRepository;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
@@ -12,19 +15,19 @@ import java.util.Scanner;
 public class Application {
     private final TransactionParserFactory transactionParserFactory;
     private final TransactionsRepository repository;
-    private final String[] listOfFiles = new String[2];
+    private final JFileChooser fc;
 
     public Application() {
         transactionParserFactory = new TransactionParserFactory();
-        listOfFiles[0] = "transactions.csv";
-        listOfFiles[1] = "transactions.xml";
         repository = new H2TransactionRepository();
+        fc = new JFileChooser();
     }
 
     public void run() {
         Scanner sc = new Scanner(System.in);
         greetings();
-        writeDataInChosenFile(sc);
+        pressEnterToContinue(sc);
+        parseAndSave(setupFileChooser());
         retrieveFromDB(sc, 0);
     }
 
@@ -33,31 +36,48 @@ public class Application {
                 "In this application, you can choose to parse one of two file formats: \n" +
                 "1) .csv \n" +
                 "2) .xml");
-        System.out.println("Type in '1' to parse .csv and '2' to parse .xml or '3' to parse both.");
-    }
-    private void writeDataInChosenFile(Scanner sc) {
-        String response = sc.next().trim();
-        switch (response) {
-            case "1":
-                repository.createTransactionTable();
-                parseAndSave(this.listOfFiles[0]);
-                break;
-            case "2":
-                repository.createTransactionTable();
-                parseAndSave(this.listOfFiles[1]);
-                break;
-            case "3":
-                repository.createTransactionTable();
-                for (String fileName : this.listOfFiles) {
-                    parseAndSave(fileName);
-                }
-                break;
-            default:
-                System.out.println("Please try again! ");
-                writeDataInChosenFile(sc);
-        }
+
     }
 
+    private void pressEnterToContinue(Scanner sc)
+    {
+        System.out.println("Press Enter key to continue...");
+        try
+        {
+            System.in.read();
+            sc.nextLine();
+        }
+        catch(Exception e)
+        {}
+    }
+
+    private File[] setupFileChooser() {
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("*.csv", "csv"));
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("*.xml", "xml"));
+        fc.setMultiSelectionEnabled(true);
+        fc.showOpenDialog(null);
+        File[] files = fc.getSelectedFiles();
+        if (files.length == 0) {
+            throw new TransactionParserException("No file(s) selected!    Have a nice day!");
+        }
+        return fc.getSelectedFiles();
+    }
+
+    private void parseAndSave(File[] files) {
+        repository.createTransactionTable();
+        for (File file : files) {
+            TransactionParser parser = this.transactionParserFactory.createParser(file.getName());
+            if (parser == null) {
+                throw new TransactionParserException("Make sure the fileType is either .csv or .xml");
+            }
+            List<Transaction> transactions = parser.parse(file);
+            System.out.println("\n\nThe list of transactions are: " + listToString(transactions));
+
+            for (Transaction t : transactions) {
+                this.repository.save(t);
+            }
+        }
+    }
 
     private void retrieveFromDB(Scanner sc, int counter) {
         List<Transaction> sqlSelect = repository.listTransactions();
@@ -76,17 +96,7 @@ public class Application {
             System.out.println("Please try again!");
             retrieveFromDB(sc, counter + 1);
         }
-    }
 
-    private void parseAndSave(String fileName) {
-        TransactionParser parser = this.transactionParserFactory.createParser(fileName);
-        File file = new File("src/main/resources/" + fileName);
-        List<Transaction> transactions = parser.parse(file);
-        System.out.println("\n\nThe list of transactions are: " + listToString(transactions));
-
-        for (Transaction t : transactions) {
-            this.repository.save(t);
-        }
     }
 
     private static String listToString(List<Transaction> transactions) {
