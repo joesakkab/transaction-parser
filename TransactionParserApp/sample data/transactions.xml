@@ -1,0 +1,26 @@
+<TransactionList>
+    <Transaction>
+        <Description>Bank Cash withdrawal</Description>
+        <Direction>Debit</Direction>
+        <Amount>
+            <Value>100</Value>
+            <Currency>JOD</Currency>
+        </Amount>
+    </Transaction>
+    <Transaction>
+        <Description>Employee Salary</Description>
+        <Direction>Credit</Direction>
+        <Amount>
+            <Value>1200</Value>
+            <Currency>USD</Currency>
+        </Amount>
+    </Transaction>
+    <Transaction>
+        <Description>Electricity Bill Payment</Description>
+        <Direction>Debit</Direction>
+        <Amount>
+            <Value>60</Value>
+            <Currency>JOD</Currency>
+        </Amount>
+    </Transaction>
+</TransactionList>
