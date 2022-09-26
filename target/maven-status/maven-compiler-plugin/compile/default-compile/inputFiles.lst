@@ -1,0 +1,12 @@
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/TransactionParser.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/Transaction.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/TransactionParserFactory.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/repositories/TransactionsRepository.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/Application.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/CSVTransactionParser.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/ParserValidators.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/TransactionParserException.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/parsers/XMLTransactionParser.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/repositories/H2TransactionRepository.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/Main.java
+/home/joe/IdeaProjects/transaction-parser/src/main/java/com/progressoft/transactions/repositories/H2TransactionRepositoryException.java
