@@ -1,5 +1,7 @@
 package com.progressoft.transactions;
 
+import com.progressoft.transactions.processors.FileProcessor;
+import com.progressoft.transactions.processors.InitialSetup;
 import com.progressoft.transactions.parsers.TransactionParser;
 import com.progressoft.transactions.parsers.TransactionParserFactory;
 import com.progressoft.transactions.repositories.H2TransactionRepository;
@@ -16,38 +18,19 @@ public class Main {
         String directory = args[0];
 //        String directory = "/home/joe/IdeaProjects/transaction-files";
         System.out.println("start processing files in " + directory);
+        InitialSetup setup = new InitialSetup(directory);
+        File[] listOfFiles = setup.getListOfFiles();
+        setup.createErrorAndSuccessDirectories();
 
-        //Create file to get list of file names
-        File first = new File(directory);
-        String[] listOfFileNames = first.list();
-
-        // Create directory called errors.
-        File errorDirectory = new File(directory + "/errors");
-        if (errorDirectory.mkdir()) {
-            System.out.println("Folder for 'errors' successfully created!");
-        } else {
-            System.out.println("Error found!");
-        }
-
-        // Create a directory called successes
-        File successDirectory = new File(directory + "/successes");
-        if (successDirectory.mkdir()) {
-            System.out.println("Folder for 'successes' successfully created!");
-        } else {
-            System.out.println("Error found!");
-        }
-
-        //Convert list of file names to list of files
-        File[] listOfFiles = new File[listOfFileNames.length];
-        for (int i = 0; i < listOfFileNames.length; i++) {
-            listOfFiles[i] = new File(directory + "/" + listOfFileNames[i]);
-        }
         // Loop through list of files and convert content to transactions
         for (File file: listOfFiles) {
             TransactionParser parser = transactionParserFactory.createParser(file.getName());
             if (parser == null) {
+                new FileProcessor(file).moveInvalidFileType();
                 continue;
             }
+
+            // Given that file format is checked, then parse the content of the file into transactions
             List<Transaction> transactions = parser.parse(file);
             System.out.println("For the file: " + file.getName());
             System.out.println("The list of transactions are: \n" + listToString(transactions));
