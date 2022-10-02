@@ -5,6 +5,8 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+
+//TODO to list the files from directory, pass the file to the parser, gets the result, then move the file either to success or failed directory
 public class FileProcessor {
     private final File TRANSACTION_FILE;
     private PrintStream writeErrors;

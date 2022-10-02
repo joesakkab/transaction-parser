@@ -3,6 +3,7 @@ package com.progressoft.transactions.parsers;
 import com.progressoft.transactions.Transaction;
 import java.math.BigDecimal;
 
+//TODO it understands only the fields validations and no more
 public class ParserValidators {
     private String[] fields;
     private boolean isFileWithErrors;

@@ -9,9 +9,13 @@ import java.util.Scanner;
 
 public class CSVTransactionParser implements TransactionParser{
 
-    // Implementation of TransactionParser interface.
+    // TODO rename CSVTransactionParser to CsvTransactionParser
+    // TODO Keep the parsers job just to parse the file, it should not move the files
+    // TODO suggestion: represent Result class that contains the parsing success or failure result
     @Override
     public List<Transaction> parse(File transactionsFile) {
+        //TODO use dependency injection for the validator
+        //TODO remove the fileProcessor
         ParserValidators validators = new ParserValidators();
         List<Transaction> list = new ArrayList<>();
         FileProcessor fileProcessor = new FileProcessor(transactionsFile);

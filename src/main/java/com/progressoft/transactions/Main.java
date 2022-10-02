@@ -11,7 +11,10 @@ import java.io.File;
 import java.util.List;
 
 public class Main {
+
+    //TODO the main has to be shorter, suggestion: let the main just calls the FileProcessor and let it handle the rest
     public static void main(String[] args) {
+        //TODO move this logic inside the FileProcessor, use also dependency injection for factory ,repository ,and the directory
         TransactionParserFactory transactionParserFactory = new TransactionParserFactory();
         TransactionsRepository repository = new H2TransactionRepository();
         repository.createTransactionTable();

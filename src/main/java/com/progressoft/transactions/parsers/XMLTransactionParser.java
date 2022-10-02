@@ -16,6 +16,10 @@ import java.util.List;
 public class XMLTransactionParser implements TransactionParser {
     // implementation of TransactionsParser interface
 //    private static boolean hasErrors = false;
+
+    // TODO rename XMLTransactionParser to XmlTransactionParser
+    // TODO Keep the parsers job just to parse the file, it should not move the files
+    // TODO suggestion: represent Result class that contains the parsing success or failure result
     private static ParserValidators VALIDATOR;
     private static File TRANSACTION_FILE = null;
     @Override
@@ -35,6 +39,7 @@ public class XMLTransactionParser implements TransactionParser {
     }
 
     // Iterate through the different transactions in the xml file.
+    //TODO this should be private method
     public static List<Transaction> getAllTransactions(Document doc) {
         NodeList transactionNodes = doc.getElementsByTagName("Transaction");
         FileProcessor fileProcessor = new FileProcessor(TRANSACTION_FILE);

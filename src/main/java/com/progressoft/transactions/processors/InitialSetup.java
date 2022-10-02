@@ -2,6 +2,7 @@ package com.progressoft.transactions.processors;
 
 import java.io.File;
 
+//TODO not clear class name, i think it can be merged with FileProcessor class
 public class InitialSetup {
     private final String MAIN_DIRECTORY;
 
