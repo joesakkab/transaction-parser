@@ -36,6 +36,12 @@ public class TransactionFileProcessor {
 
         for (File file: listOfFiles) {
             currentFile_ = file;
+
+            // checks if current file is a directory, so ignore
+            if (!file.getName().contains(".")) {
+                continue;
+            }
+            
             TransactionParser parser = factory_.createParser(file.getName());
             if (parser == null) {
                 moveInvalidFileType();
