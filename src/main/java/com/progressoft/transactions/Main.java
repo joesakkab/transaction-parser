@@ -7,10 +7,10 @@ import com.progressoft.transactions.repositories.H2TransactionRepository;
 public class Main {
     public static void main(String[] args) {
         TransactionFileProcessor transactionFileProcessor = new TransactionFileProcessor(
-                new TransactionParserFactory(), new H2TransactionRepository(), new Display(), args[0]
+                new TransactionParserFactory(), new H2TransactionRepository(), new Display(),
+                args[0]
         );
 //         SAMPLE DIRECTORY: "/home/joe/IdeaProjects/transaction-files"
-//        transactionFileProcessor.setDIRECTORY("/home/joe/IdeaProjects/transaction-files");
         transactionFileProcessor.process();
     }
 }

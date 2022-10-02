@@ -10,22 +10,21 @@ import java.io.File;
 
 public class XmlTransactionParser implements TransactionParser {
 
-    private static ParserValidators VALIDATOR;
-    private final Result RESULT;
-    public XmlTransactionParser() {
-        VALIDATOR = new ParserValidators();
-        RESULT = new Result();
+    private static ParserValidators validator_;
+    public XmlTransactionParser(ParserValidators validator) {
+        validator_ = validator;
     }
     @Override
     public Result parse(File transactionsFile) {
+        Result result = new Result();
         try {
             NodeList transactionNodes = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                     .parse(transactionsFile).getElementsByTagName("Transaction");
             for (int i = 0; i < transactionNodes.getLength(); i++) {
                 setTransactionFields(transactionNodes.item(i));
-                updateResult();
+                updateResult(result);
             }
-            return RESULT;
+            return result;
         } catch(Exception e){
             throw new TransactionParserException(e.getMessage(), e.getCause());
         }
@@ -40,16 +39,16 @@ public class XmlTransactionParser implements TransactionParser {
             fields[2] = element.getElementsByTagName("Value").item(0).getTextContent();
             fields[3] = element.getElementsByTagName("Currency").item(0).getTextContent();
         }
-        VALIDATOR.setFields(fields);
+        validator_.setFields(fields);
 
     }
 
-    private void updateResult() {
-        String message = VALIDATOR.getErrorMessage();
+    private void updateResult(Result result) {
+        String message = validator_.getErrorMessage();
         if (message.equals("")) {
-            RESULT.addTransaction(VALIDATOR.getTransaction());
+            result.addTransaction(validator_.getTransaction());
         } else {
-            RESULT.addErrorMessage(message);
+            result.addErrorMessage(message);
         }
     }
 

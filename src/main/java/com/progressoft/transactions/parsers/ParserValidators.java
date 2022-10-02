@@ -7,6 +7,36 @@ public class ParserValidators {
     private String[] fields;
     private int transactionCounter;
 
+    public ParserValidators() {
+        this.transactionCounter = 0;
+    }
+
+    public String getErrorMessage() {
+        String[] fieldNames = {"Description", "Direction", "Amount", "Currency"};
+        int idx = getEmptyFieldIndex();
+        incrementTransactionCounter();
+        if (!isCorrectLength()) {
+            return "transaction " + transactionCounter + ": Missing field";
+        } else if (idx != -1) {
+            return "transaction " + transactionCounter + ": " + fieldNames[idx] + " field is empty";
+        } else if (!isCorrectDirection()) {
+            return "transaction " + transactionCounter + ": Direction must be 'Debit' or 'Credit'";
+        } else if (!isCorrectAmount()) {
+            return "transaction " + transactionCounter + ": Amount field must be numeric";
+        } else if (!isCorrectCurrency()) {
+            return "transaction " + transactionCounter + ": Currency field is not valid";
+        }
+        return "";
+    }
+
+    public Transaction getTransaction() {
+        return new Transaction(fields[0], fields[1], new BigDecimal(fields[2]), fields[3]);
+    }
+
+    public void setFields(String[] fields) {
+        this.fields = fields;
+    }
+
     private void incrementTransactionCounter() {
         transactionCounter++;
     }
@@ -49,34 +79,6 @@ public class ParserValidators {
         }
     }
 
-    public ParserValidators() {
-        this.transactionCounter = 0;
-    }
 
-    public String getErrorMessage() {
-        String[] fieldNames = {"Description", "Direction", "Amount", "Currency"};
-        int idx = getEmptyFieldIndex();
-        incrementTransactionCounter();
-        if (!isCorrectLength()) {
-            return "transaction " + transactionCounter + ": Missing field";
-        } else if (idx != -1) {
-           return "transaction " + transactionCounter + ": " + fieldNames[idx] + " field is empty";
-        } else if (!isCorrectDirection()) {
-            return "transaction " + transactionCounter + ": Direction must be 'Debit' or 'Credit'";
-        } else if (!isCorrectAmount()) {
-            return "transaction " + transactionCounter + ": Amount field must be numeric";
-        } else if (!isCorrectCurrency()) {
-            return "transaction " + transactionCounter + ": Currency field is not valid";
-        }
-        return "";
-    }
-
-    public Transaction getTransaction() {
-        return new Transaction(fields[0], fields[1], new BigDecimal(fields[2]), fields[3]);
-    }
-
-    public void setFields(String[] fields) {
-        this.fields = fields;
-    }
 
 }

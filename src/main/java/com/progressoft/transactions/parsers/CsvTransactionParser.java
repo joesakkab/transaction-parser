@@ -2,39 +2,38 @@ package com.progressoft.transactions.parsers;
 import com.progressoft.transactions.processors.Result;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CsvTransactionParser implements TransactionParser {
 
-    private final ParserValidators VALIDATOR;
-    private final Result RESULT;
-    public CsvTransactionParser() {
-        VALIDATOR = new ParserValidators();
-        RESULT = new Result();
+    private final ParserValidators validator_;
+    public CsvTransactionParser(ParserValidators validator) {
+        validator_ = validator;
     }
     @Override
     public Result parse(File transactionsFile) {
         String line;
+        Result result = new Result();
         try {
             Scanner sc = new Scanner(transactionsFile);
             while (sc.hasNextLine()) {
                 line = sc.nextLine();
-                VALIDATOR.setFields(line.trim().split(","));
-                updateResult();
+                validator_.setFields(line.trim().split(","));
+                updateResult(result);
             }
-            return RESULT;
+            return result;
         } catch (Exception e) {
-            System.out.println("File not fond!");
+            throw new TransactionParserException(e.getMessage());
         }
-        return RESULT;
     }
 
-    private void updateResult() {
-        String message = VALIDATOR.getErrorMessage();
+    private void updateResult(Result result) {
+        String message = validator_.getErrorMessage();
         if (message.equals("")) {
-            RESULT.addTransaction(VALIDATOR.getTransaction());
+            result.addTransaction(validator_.getTransaction());
         } else {
-            RESULT.addErrorMessage(message);
+            result.addErrorMessage(message);
         }
     }
 }

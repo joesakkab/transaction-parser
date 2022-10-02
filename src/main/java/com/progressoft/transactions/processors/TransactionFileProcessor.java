@@ -20,7 +20,8 @@ public class TransactionFileProcessor {
     private final String directory_;
     private File currentFile_;
 
-    public TransactionFileProcessor(TransactionParserFactory factory, H2TransactionRepository repository, Display display, String directory) {
+    public TransactionFileProcessor(TransactionParserFactory factory, H2TransactionRepository
+            repository, Display display, String directory) {
         factory_ = factory;
         repository_ = repository;
         display_ = display;
