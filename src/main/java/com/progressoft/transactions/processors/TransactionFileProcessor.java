@@ -1,6 +1,6 @@
 package com.progressoft.transactions.processors;
 
-import com.progressoft.transactions.DisplayContent;
+import com.progressoft.transactions.Display;
 import com.progressoft.transactions.Transaction;
 import com.progressoft.transactions.parsers.TransactionParser;
 import com.progressoft.transactions.parsers.TransactionParserFactory;
@@ -14,11 +14,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionFileProcessor {
-    private final TransactionParserFactory FACTORY;
-    private final H2TransactionRepository REPOSITORY;
-    private final DisplayContent DISPLAY_CONTENT;
-    private String DIRECTORY;
+    private final TransactionParserFactory factory_;
+    private final H2TransactionRepository repository_;
+    private final Display display_;
+    private final String directory_;
     private File currentFile_;
+
+    public TransactionFileProcessor(TransactionParserFactory factory, H2TransactionRepository repository, Display display, String directory) {
+        factory_ = factory;
+        repository_ = repository;
+        display_ = display;
+        directory_ = directory;
+    }
+
+
+    public void process() {
+        repository_.createTransactionTable();
+        File[] listOfFiles = getListOfFiles();
+        createErrorAndSuccessDirectories();
+
+        for (File file: listOfFiles) {
+            currentFile_ = file;
+            TransactionParser parser = factory_.createParser(file.getName());
+            if (parser == null) {
+                moveInvalidFileType();
+                continue;
+            }
+            Result result = parser.parse(file);
+            moveFileToCorrectLocation(result);
+            display_.printTransactionsList(file.getName(), result.getListOfTransactions());
+            for (Transaction t : result.getListOfTransactions()) {
+                repository_.save(t);
+            }
+
+        }
+
+        display_.printTransactionsList("the H2 Database", repository_.listTransactions());
+    }
 
     private void moveFileToCorrectLocation(Result result) {
         if (result.isFileWithError()) {
@@ -61,7 +93,7 @@ public class TransactionFileProcessor {
 
     private void createErrorAndSuccessDirectories() {
         // Create directory called errors.
-        File errorDirectory = new File(DIRECTORY + "/errors");
+        File errorDirectory = new File(directory_ + "/errors");
         if (errorDirectory.mkdir()) {
             System.out.println("Folder for 'errors' successfully created!");
         } else {
@@ -69,7 +101,7 @@ public class TransactionFileProcessor {
         }
 
         // Create a directory called successes
-        File successDirectory = new File(DIRECTORY + "/successes");
+        File successDirectory = new File(directory_ + "/successes");
         if (successDirectory.mkdir()) {
             System.out.println("Folder for 'successes' successfully created!");
         } else {
@@ -78,13 +110,13 @@ public class TransactionFileProcessor {
     }
 
     private File[] getListOfFiles() {
-        File first = new File(DIRECTORY);
+        File first = new File(directory_);
         String[] listOfFileNames = first.list();
 
         if (listOfFileNames != null) {
             File[] listOfFiles = new File[listOfFileNames.length];
             for (int i = 0; i < listOfFileNames.length; i++) {
-                listOfFiles[i] = new File(DIRECTORY + "/" + listOfFileNames[i]);
+                listOfFiles[i] = new File(directory_ + "/" + listOfFileNames[i]);
             }
             return listOfFiles;
         } else {
@@ -93,42 +125,5 @@ public class TransactionFileProcessor {
 
     }
 
-    //TODO constructor should be placed after class fields directly
-    //TODO the dependencies should be injected from outside, not initialized inside the class
-    //TODO rename fields FACTORY, REPOSITORY, DISPLAY_CONTENT : Variable names must be in mixed case starting with lower case. because they are not constants
-    public TransactionFileProcessor() {
-        FACTORY = new TransactionParserFactory();
-        REPOSITORY = new H2TransactionRepository();
-        DISPLAY_CONTENT = new DisplayContent();
-    }
 
-    //TODO what if the caller of the class called process method without calling setDIRECTORY ?? so it should be injected through constructor
-    //TODO public methods preferably should be after the constructor above the private methods , then all related private methods below it
-    public void setDIRECTORY(String directory) {
-        DIRECTORY = directory;
-    }
-
-    public void process() {
-        REPOSITORY.createTransactionTable();
-        File[] listOfFiles = getListOfFiles();
-        createErrorAndSuccessDirectories();
-
-        for (File file: listOfFiles) {
-            currentFile_ = file;
-            TransactionParser parser = FACTORY.createParser(file.getName());
-            if (parser == null) {
-                moveInvalidFileType();
-                continue;
-            }
-            Result result = parser.parse(file);
-            moveFileToCorrectLocation(result);
-            DISPLAY_CONTENT.printTransactionsList(file.getName(), result.getListOfTransactions());
-            for (Transaction t : result.getListOfTransactions()) {
-                REPOSITORY.save(t);
-            }
-
-        }
-
-        DISPLAY_CONTENT.printTransactionsList("the H2 Database", REPOSITORY.listTransactions());
-    }
 }

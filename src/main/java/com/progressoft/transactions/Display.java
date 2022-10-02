@@ -1,8 +1,7 @@
 package com.progressoft.transactions;
 
 import java.util.List;
-//TODO class name should be noun
-public class DisplayContent {
+public class Display {
 
     public void printTransactionsList(String location, List<Transaction> transactionsList) {
         StringBuilder result = new StringBuilder();

@@ -26,8 +26,7 @@ public class CsvTransactionParser implements TransactionParser {
         } catch (Exception e) {
             System.out.println("File not fond!");
         }
-        //TODO don't return null result
-        return null;
+        return RESULT;
     }
 
     private void updateResult() {
