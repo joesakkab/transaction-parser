@@ -6,9 +6,9 @@ public class TransactionParserFactory {
             return null;
         }
         if (fileType.endsWith(".csv")) {
-            return new CSVTransactionParser();
+            return new CsvTransactionParser();
         } else if (fileType.endsWith(".xml")) {
-            return new XMLTransactionParser();
+            return new XmlTransactionParser();
         }
         return null;
     }

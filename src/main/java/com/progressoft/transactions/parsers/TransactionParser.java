@@ -1,10 +1,10 @@
 package com.progressoft.transactions.parsers;
-import com.progressoft.transactions.Transaction;
+import com.progressoft.transactions.processors.Result;
 
 import java.io.File;
-import java.util.List;
 
 public interface TransactionParser {
+
     //TODO to return Result
-    List<Transaction> parse(File transactionsFile);
+    Result parse(File transactionsFile);
 }
