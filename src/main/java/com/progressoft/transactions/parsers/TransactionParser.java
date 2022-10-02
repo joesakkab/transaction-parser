@@ -5,6 +5,5 @@ import java.io.File;
 
 public interface TransactionParser {
 
-    //TODO to return Result
     Result parse(File transactionsFile);
 }

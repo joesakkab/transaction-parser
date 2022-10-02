@@ -93,12 +93,17 @@ public class TransactionFileProcessor {
 
     }
 
+    //TODO constructor should be placed after class fields directly
+    //TODO the dependencies should be injected from outside, not initialized inside the class
+    //TODO rename fields FACTORY, REPOSITORY, DISPLAY_CONTENT : Variable names must be in mixed case starting with lower case. because they are not constants
     public TransactionFileProcessor() {
         FACTORY = new TransactionParserFactory();
         REPOSITORY = new H2TransactionRepository();
         DISPLAY_CONTENT = new DisplayContent();
     }
 
+    //TODO what if the caller of the class called process method without calling setDIRECTORY ?? so it should be injected through constructor
+    //TODO public methods preferably should be after the constructor above the private methods , then all related private methods below it
     public void setDIRECTORY(String directory) {
         DIRECTORY = directory;
     }
