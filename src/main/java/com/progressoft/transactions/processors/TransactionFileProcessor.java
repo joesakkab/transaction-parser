@@ -41,7 +41,7 @@ public class TransactionFileProcessor {
             if (!file.getName().contains(".")) {
                 continue;
             }
-            
+
             TransactionParser parser = factory_.createParser(file.getName());
             if (parser == null) {
                 moveInvalidFileType();
